@@ -5,23 +5,33 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".database_and_friends_app.DatabaseActivity">
+
     <Button
         android:id="@+id/sqlite_database"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Sqlite Database"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/content_provider"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/content_provider"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="ContentProvider"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sqlite_database" />
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <Button
+        android:id="@+id/task_timer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Task Timer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/content_provider" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

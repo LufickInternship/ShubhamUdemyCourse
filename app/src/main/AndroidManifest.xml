@@ -12,9 +12,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.UdemyCourse">
         <activity
+            android:name=".database_and_friends_app.task_timer.TaskTimerActivity"
+            android:exported="true"
+            android:label="@string/title_activity_task_timer"
+            android:theme="@style/Theme.UdemyCourse.NoActionBar" />
+        <activity
             android:name=".database_and_friends_app.DatabaseActivity"
-            android:label="Database and friends"
-            android:exported="true" />
+            android:exported="true"
+            android:label="Database and friends" />
         <activity
             android:name=".database_and_friends_app.content_provider.ContentProviderActivity"
             android:exported="true"
@@ -34,6 +39,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <provider
+            android:authorities="com.shubhamkumarwinner.udemycourse.provider"
+            android:name=".database_and_friends_app.task_timer.TaskTimerProvider"
+            android:exported="false"/>
     </application>
 
 </manifest>

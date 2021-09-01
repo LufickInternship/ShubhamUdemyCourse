@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/task_timer_add_task"
+        android:title="@string/task_timer__add_task"
+        android:icon="@android:drawable/ic_menu_add"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/task_timer_show_durations"
+        android:title="@string/task_timer_show_durations"
+        android:icon="@android:drawable/ic_menu_view"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/task_timer_settings"
+        android:title="@string/task_timer_settings"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/task_timer_show_about"
+        android:title="@string/task_timer_show_about"
+        android:icon="@android:drawable/ic_menu_info_details"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/task_timer_generate"
+        android:title="@string/task_timer_generate"
+        android:visible="false"
+        app:showAsAction="never"/>
+</menu>
