@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".database_and_friends_app.task_timer.TaskTimerActivity">
+    tools:context=".database_and_friends_app.task_timer.AddEditActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -20,8 +20,7 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <include
-        android:id="@+id/task_timer"
-        layout="@layout/content_task_timer" />
+    <include layout="@layout/content_add_edit" />
+
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

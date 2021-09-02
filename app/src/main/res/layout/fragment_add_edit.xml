@@ -1,25 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".database_and_friends_app.task_timer.AddEditFragment"
+    tools:showIn="@layout/activity_add_edit">
 
     <EditText
         android:id="@+id/add_edit_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:maxLength="64"
         android:hint="@string/add_edit_name_hint"
-        android:inputType="textPersonName"/>
+        android:inputType="textPersonName"
+        android:maxLength="64" />
 
     <EditText
         android:id="@+id/add_edit_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:maxLength="256"
         android:hint="@string/add_edit_description_hint"
         android:inputType="textMultiLine"
+        android:maxLength="256"
         android:minHeight="48dp" />
 
     <EditText
@@ -27,12 +31,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/add_edit_sort_hint"
-        android:maxLength="9"
         android:inputType="number"
+        android:maxLength="9"
         android:minHeight="48dp" />
 
     <Button
-        android:id="@+id/add_edit_save"
+        android:id="@+id/add_edit_save_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"

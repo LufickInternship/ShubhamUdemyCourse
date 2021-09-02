@@ -1,12 +1,7 @@
 package com.shubhamkumarwinner.udemycourse.database_and_friends_app.task_timer;
 
-import android.content.ContentResolver;
-import android.content.ContentValues;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.net.Uri;
+import android.content.Intent;
 import android.os.Bundle;
-import com.google.android.material.snackbar.Snackbar;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,16 +9,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
+
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
 import com.shubhamkumarwinner.udemycourse.R;
 import com.shubhamkumarwinner.udemycourse.databinding.ActivityTaskTimerBinding;
 
-public class TaskTimerActivity extends AppCompatActivity {
+public class TaskTimerActivity extends AppCompatActivity implements CursorRecyclerViewAdapter.OnTaskClickListener {
     private static final String TAG = "TaskTimerActivity";
+
+    // Whether or not the activity is in 2-pane mode
+    // i.e. running in landscape or a tablet
+    private boolean twoPane = false;
+    public static final String ADD_EDIT_FRAGMENT = "AddEditFragment";
 
     private ActivityTaskTimerBinding binding;
 
@@ -36,77 +35,11 @@ public class TaskTimerActivity extends AppCompatActivity {
 
         setSupportActionBar(binding.toolbar);
 
-        String[] projection = {TasksContract.Columns._ID,
-                               TasksContract.Columns.TASKS_NAME,
-                               TasksContract.Columns.TASKS_DESCRIPTION,
-                               TasksContract.Columns.TASKS_SORT_ORDER};
-        ContentResolver contentResolver = getContentResolver();
-
-        ContentValues values = new ContentValues();
-
-        //for deleting item using selection args
-        String selection = TasksContract.Columns.TASKS_DESCRIPTION + " = ?";
-        String[] args = {"For deletion"};
-        int count = contentResolver.delete(TasksContract.CONTENT_URI, selection, args);
-        Log.d(TAG, "onCreate: " + count + " record deleted");
-
-        //for deleting item
-//        int count = contentResolver.delete(TasksContract.buildTaskUri(1), null, null);
-//        Log.d(TAG, "onCreate: " + count + " record deleted");
-
-        //for updating multiple row using selectionArgs for prevention from sql injection
-//        values.put(TasksContract.Columns.TASKS_DESCRIPTION, "For deletion");
-//        String selection = TasksContract.Columns.TASKS_SORT_ORDER +" = ?";
-//        String[] args = {"99"};
-//        int count = contentResolver.update(TasksContract.CONTENT_URI, values, selection, args);
-//        Log.d(TAG, "onCreate: " + count + " record updated");
-
-        //for updating multiple row
-//        values.put(TasksContract.Columns.TASKS_SORT_ORDER, "99");
-//        values.put(TasksContract.Columns.TASKS_DESCRIPTION, "Completed");
-//        String selection = TasksContract.Columns.TASKS_SORT_ORDER +" = "+2;
-//        int count = contentResolver.update(TasksContract.CONTENT_URI, values, selection, null);
-//        Log.d(TAG, "onCreate: " + count + " record updated");
-
-        // for updating value of given id
-//        values.put(TasksContract.Columns.TASKS_NAME, "Content provider");
-//        values.put(TasksContract.Columns.TASKS_DESCRIPTION, "Record content provider video");
-//        int count = contentResolver.update(TasksContract.buildTaskUri(1), values, null, null);
-//        Log.d(TAG, "onCreate: "+count+" record updated");
-
-        //for inserting item
-//        values.put(TasksContract.Columns.TASKS_NAME, "New Task 1");
-//        values.put(TasksContract.Columns.TASKS_DESCRIPTION, "Description 1");
-//        values.put(TasksContract.Columns.TASKS_SORT_ORDER, 2);
-//        Uri uri = contentResolver.insert(TasksContract.CONTENT_URI, values);
-
-        Cursor cursor = contentResolver.query(
-                TasksContract.CONTENT_URI,
-                projection,
-                null,
-                null,
-                TasksContract.Columns.TASKS_NAME
-        );
-        if (cursor != null){
-            Log.d(TAG, "onCreate: number of rows: "+cursor.getCount());
-            while (cursor.moveToNext()){
-                for (int i=0; i<cursor.getColumnCount(); i++){
-                    Log.d(TAG, "onCreate: "+cursor.getColumnName(i) + " : " + cursor.getString(i));
-                }
-                Log.d(TAG, "onCreate: ================================================");
-            }
-            cursor.close();
+        if (binding.taskTimer.taskDetailsContainer != null){
+            // The detail container view will be present only in the large-screen layouts (res/values-land and res/values-sw600dp).
+            // If this view is present, then the activity should be in two-pane mode.
+            twoPane = true;
         }
-//        TaskTimerDatabase taskTimerDatabase = TaskTimerDatabase.getInstance(this);
-//        final SQLiteDatabase db = taskTimerDatabase.getReadableDatabase();
-
-        binding.fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
     }
 
     @Override
@@ -119,9 +52,53 @@ public class TaskTimerActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
 
-        if (id==R.id.task_timer_settings){
-            return true;
+        switch (id){
+            case R.id.task_timer_add_task:
+                taskEditRequest(null);
+                break;
+            case R.id.task_timer_show_durations:
+                break;
+            case R.id.task_timer_settings:
+                break;
+            case R.id.task_timer_show_about:
+                break;
+            case R.id.task_timer_generate:
+                break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void taskEditRequest(Task task){
+        Log.d(TAG, "taskEditRequest: starts");
+        if (twoPane){
+            Log.d(TAG, "taskEditRequest: in two-pane mode (tablet)");
+            AddEditFragment fragment = new AddEditFragment();
+            Bundle arguments = new Bundle();
+            arguments.putSerializable(Task.class.getSimpleName(), task);
+            fragment.setArguments(arguments);
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.task_details_container, fragment);
+            fragmentTransaction.commit();
+        }else {
+            Log.d(TAG, "taskEditRequest: in single-pane mode (phone)");
+            Intent detailIntent = new Intent(this, AddEditActivity.class);
+            if (task != null){ // editing a task
+                detailIntent.putExtra(Task.class.getSimpleName(), task);
+                startActivity(detailIntent);
+            }else { // adding a new task
+                startActivity(detailIntent);
+            }
+        }
+    }
+
+    @Override
+    public void onEditClick(Task task) {
+        taskEditRequest(task);
+    }
+
+    @Override
+    public void onDeleteClick(Task task) {
+        getContentResolver().delete(TasksContract.buildTaskUri(task.getId()), null, null);
     }
 }

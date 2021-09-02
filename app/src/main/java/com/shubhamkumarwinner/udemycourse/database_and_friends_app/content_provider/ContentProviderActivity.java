@@ -178,7 +178,7 @@ public class ContentProviderActivity extends AppCompatActivity {
                 projection,
                 null,
                 null,
-                ContactsContract.Contacts.DISPLAY_NAME_PRIMARY
+                ContactsContract.Contacts.DISPLAY_NAME_PRIMARY+" COLLATE NOCASE"
         );
 
         if (cursor != null) {

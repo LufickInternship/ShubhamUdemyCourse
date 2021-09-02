@@ -103,7 +103,11 @@ public class TaskTimerProvider extends ContentProvider {
                 throw new IllegalArgumentException("Unknown URI: "+uri);
         }
         SQLiteDatabase db = openHelper.getReadableDatabase();
-        return queryBuilder.query(db, projection, selection, selectionArgs, null, null, sortOrder);
+//        return queryBuilder.query(db, projection, selection, selectionArgs, null, null, sortOrder);
+        Cursor cursor = queryBuilder.query(db, projection, selection, selectionArgs, null, null, sortOrder);
+        Log.d(TAG, "query: rows in returned cursor = " + cursor.getCount());
+        cursor.setNotificationUri(getContext().getContentResolver(), uri);
+        return cursor;
     }
 
     @Nullable
@@ -163,6 +167,13 @@ public class TaskTimerProvider extends ContentProvider {
             default:
                 throw new IllegalArgumentException("Unknown uri: "+ uri);
         }
+        if (recordId>=0){
+            // something was inserted
+            Log.d(TAG, "insert: Setting notifyChanged with "+ uri);
+            getContext().getContentResolver().notifyChange(uri, null);
+        }else {
+            Log.d(TAG, "insert: Nothing inserted ");
+        }
         Log.d(TAG, "Exiting insert, returning "+ returnUri);
         return returnUri;
     }
@@ -208,6 +219,13 @@ public class TaskTimerProvider extends ContentProvider {
             default:
                 throw new IllegalArgumentException("Unknown uri: "+ uri);
         }
+        if (count>0){
+            // something was deleted
+            Log.d(TAG, "delete: setting notifyChange with "+ uri);
+            getContext().getContentResolver().notifyChange(uri, null);
+        }else {
+            Log.d(TAG, "delete: nothing deleted");
+        }
         Log.d(TAG, "Exiting delete, returning "+count);
         return count;
     }
@@ -252,6 +270,13 @@ public class TaskTimerProvider extends ContentProvider {
 //                break;
             default:
                 throw new IllegalArgumentException("Unknown uri: "+ uri);
+        }
+        if (count>0){
+            // something was updated
+            Log.d(TAG, "update: setting notifyChange with "+ uri);
+            getContext().getContentResolver().notifyChange(uri, null);
+        }else {
+            Log.d(TAG, "update: nothing update");
         }
         Log.d(TAG, "Exiting update, returning "+count);
         return count;
