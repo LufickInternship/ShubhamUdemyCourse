@@ -1,7 +1,9 @@
 package com.shubhamkumarwinner.udemycourse.database_and_friends_app.task_timer;
 
+import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,8 +22,37 @@ public class AddEditFragment extends Fragment {
 
     private FragmentAddEditBinding binding;
 
+    public boolean canClose() {
+        return false;
+    }
+
     public enum FragmentEditMode{EDIT, ADD}
     private FragmentEditMode mode;
+
+    private OnSaveClicked saveListener = null;
+
+    interface OnSaveClicked{
+        void onSaveClicked();
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        Log.d(TAG, "onAttach: starts");
+        super.onAttach(context);
+        Activity activity = getActivity();
+        if (!(activity instanceof OnSaveClicked)){
+            throw new ClassCastException(activity.getClass().getSimpleName()
+                    + " must implement AddEditFragment.OnSaveClicked interface");
+        }
+        saveListener = (OnSaveClicked) activity;
+    }
+
+    @Override
+    public void onDetach() {
+        Log.d(TAG, "onDetach: starts");
+        super.onDetach();
+        saveListener = null;
+    }
 
     @Override
     public View onCreateView(
@@ -92,6 +123,9 @@ public class AddEditFragment extends Fragment {
                     break;
             }
             Log.d(TAG, "onCreateView: Done editing");
+            if (saveListener != null) {
+                saveListener.onSaveClicked();
+            }
         });
         Log.d(TAG, "onCreateView: Exiting...");
         return binding.getRoot();

@@ -55,6 +55,8 @@ public class TaskTimerFragment extends Fragment implements LoaderManager.LoaderC
         binding = null;
     }
 
+
+    //TODO ask question about these method (onCreateLoader, onLoadFinished, onLoaderReset)
     @NonNull
     @Override
     public Loader<Cursor> onCreateLoader(int id, @Nullable Bundle args) {

@@ -110,6 +110,7 @@ public class TaskTimerProvider extends ContentProvider {
         return cursor;
     }
 
+    //TODO ask question about this method
     @Nullable
     @Override
     public String getType(@NonNull Uri uri) {
