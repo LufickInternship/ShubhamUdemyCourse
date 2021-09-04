@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".database_and_friends_app.task_timer.AddEditFragment"
-    tools:showIn="@layout/activity_add_edit">
+    tools:context=".database_and_friends_app.task_timer.AddEditFragment">
 
     <EditText
         android:id="@+id/add_edit_name"

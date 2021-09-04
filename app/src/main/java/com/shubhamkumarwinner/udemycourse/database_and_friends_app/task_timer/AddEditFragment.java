@@ -1,5 +1,6 @@
 package com.shubhamkumarwinner.udemycourse.database_and_friends_app.task_timer;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -9,10 +10,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.shubhamkumarwinner.udemycourse.databinding.FragmentAddEditBinding;
@@ -40,7 +42,7 @@ public class AddEditFragment extends Fragment {
         Log.d(TAG, "onAttach: starts");
         super.onAttach(context);
         Activity activity = getActivity();
-        if (!(activity instanceof OnSaveClicked)){
+        if (!(activity instanceof OnSaveClicked) && activity !=null){
             throw new ClassCastException(activity.getClass().getSimpleName()
                     + " must implement AddEditFragment.OnSaveClicked interface");
         }
@@ -48,15 +50,29 @@ public class AddEditFragment extends Fragment {
     }
 
     @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        ActionBar actionBar = ((AppCompatActivity) requireActivity()).getSupportActionBar();
+        if (actionBar != null){
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+    }
+
+    @Override
     public void onDetach() {
         Log.d(TAG, "onDetach: starts");
         super.onDetach();
         saveListener = null;
+        ActionBar actionBar = ((AppCompatActivity)requireActivity()).getSupportActionBar();
+        if (actionBar != null){
+            actionBar.setDisplayHomeAsUpEnabled(false);
+        }
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public View onCreateView(
-            LayoutInflater inflater, ViewGroup container,
+            @NonNull LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState
     ) {
         binding = FragmentAddEditBinding.inflate(inflater, container, false);
@@ -93,11 +109,14 @@ public class AddEditFragment extends Fragment {
                 so = 0;
             }
 
-            ContentResolver contentResolver = getActivity().getContentResolver();
+            ContentResolver contentResolver = requireActivity().getContentResolver();
             ContentValues values = new ContentValues();
 
             switch (mode){
                 case EDIT:
+                    if (task ==null){
+                        break;
+                    }
                     if (!binding.addEditName.getText().toString().equals(task.getName())){
                         values.put(TasksContract.Columns.TASKS_NAME, binding.addEditName.getText().toString());
                     }

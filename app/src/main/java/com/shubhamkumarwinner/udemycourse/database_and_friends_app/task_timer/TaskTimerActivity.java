@@ -1,18 +1,20 @@
 package com.shubhamkumarwinner.udemycourse.database_and_friends_app.task_timer;
 
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+
 import com.shubhamkumarwinner.udemycourse.BuildConfig;
 import com.shubhamkumarwinner.udemycourse.R;
 import com.shubhamkumarwinner.udemycourse.databinding.ActivityTaskTimerBinding;
@@ -23,6 +25,7 @@ public class TaskTimerActivity extends AppCompatActivity
         TaskTimerDialog.DialogEvents{
     private static final String TAG = "TaskTimerActivity";
     public static final int DIALOG_ID_CANCEL_EDIT = 2;
+    public static final int DIALOG_ID_CANCEL_EDIT_UP = 3;
 
     private AlertDialog dialog= null;       //module scope because we need to dismiss it in onStop
 
@@ -33,21 +36,49 @@ public class TaskTimerActivity extends AppCompatActivity
 
     public static final int DIALOG_ID_DELETE = 1;
 
-    private ActivityTaskTimerBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        binding = ActivityTaskTimerBinding.inflate(getLayoutInflater());
+        ActivityTaskTimerBinding binding = ActivityTaskTimerBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         setSupportActionBar(binding.toolbar);
 
-        if (binding.taskTimer.taskDetailsContainer != null){
-            // The detail container view will be present only in the large-screen layouts (res/values-land and res/values-sw600dp).
-            // If this view is present, then the activity should be in two-pane mode.
-            twoPane = true;
+//        if (binding.taskTimer.taskDetailsContainer != null){
+//            // The detail container view will be present only in the large-screen layouts (res/values-land and res/values-sw600dp).
+//            // If this view is present, then the activity should be in two-pane mode.
+//            twoPane = true;
+//        }
+        twoPane = getResources().getConfiguration().orientation== Configuration.ORIENTATION_LANDSCAPE;
+        Log.d(TAG, "onCreate: twoPane is "+twoPane);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+
+        // If the AddEditFragment exists, we're editing
+        boolean editing = fragmentManager.findFragmentById(R.id.task_details_container) != null;
+        Log.d(TAG, "onCreate: editing is "+editing);
+
+        // We need references to the containers, so we show or hide them as necessary
+        // No need to cast them, as we're only calling a method that's  available for all views.
+        View addEditLayout = findViewById(R.id.task_details_container);
+        View taskTimerFragment = findViewById(R.id.fragment);
+
+        if(twoPane){
+            Log.d(TAG, "onCreate: two pane mode");
+            taskTimerFragment.setVisibility(View.VISIBLE);
+            addEditLayout.setVisibility(View.VISIBLE);
+        }else if(editing){
+
+            Log.d(TAG, "onCreate: single pane, editing");
+            // hide the left hand fragment, to make room for editing
+            taskTimerFragment.setVisibility(View.GONE);
+        }else {
+            Log.d(TAG, "onCreate: single pane not editing");
+            // Show the left hand fragment
+            taskTimerFragment.setVisibility(View.VISIBLE);
+            // hide the editing frame
+            addEditLayout.setVisibility(View.GONE);
         }
     }
 
@@ -74,6 +105,16 @@ public class TaskTimerActivity extends AppCompatActivity
                 break;
             case R.id.task_timer_generate:
                 break;
+            case android.R.id.home:
+                Log.d(TAG, "onOptionsItemSelected: home button pressed");
+                AddEditFragment fragment =
+                        (AddEditFragment) getSupportFragmentManager().findFragmentById(R.id.task_details_container);
+                if(fragment != null && fragment.canClose()) {
+                    return super.onOptionsItemSelected(item);
+                } else {
+                    showConfirmationDialog(DIALOG_ID_CANCEL_EDIT_UP);
+                    return true;  // indicate we are handling this
+                }
         }
         return super.onOptionsItemSelected(item);
     }
@@ -99,36 +140,37 @@ public class TaskTimerActivity extends AppCompatActivity
         dialog = builder.create();
         dialog.setCanceledOnTouchOutside(true);
         TextView tv = messageView.findViewById(R.id.about_version);
-        tv.setText("v"+BuildConfig.VERSION_NAME);
+        tv.setText("v"+ BuildConfig.VERSION_NAME);
         dialog.show();
     }
 
     private void taskEditRequest(Task task){
         Log.d(TAG, "taskEditRequest: starts");
-        if (twoPane){
-            Log.d(TAG, "taskEditRequest: in two-pane mode (tablet)");
-            AddEditFragment fragment = new AddEditFragment();
-            Bundle arguments = new Bundle();
-            arguments.putSerializable(Task.class.getSimpleName(), task);
-            fragment.setArguments(arguments);
-//            FragmentManager fragmentManager = getSupportFragmentManager();
-//            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//            fragmentTransaction.replace(R.id.task_details_container, fragment);
-//            fragmentTransaction.commit();
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.task_details_container, fragment)
-                    .commit();
-        }else {
+        Log.d(TAG, "taskEditRequest: in two-pane mode (tablet)");
+        AddEditFragment fragment = new AddEditFragment();
+        Bundle arguments = new Bundle();
+        arguments.putSerializable(Task.class.getSimpleName(), task);
+        fragment.setArguments(arguments);
+//           FragmentManager fragmentManager = getSupportFragmentManager();
+//           FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//           fragmentTransaction.replace(R.id.task_details_container, fragment);
+//           fragmentTransaction.commit();
+
+        Log.d(TAG, "taskEditRequest: twoPane mode");
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.task_details_container, fragment)
+                .commit();
+        if (!twoPane){
             Log.d(TAG, "taskEditRequest: in single-pane mode (phone)");
-            Intent detailIntent = new Intent(this, AddEditActivity.class);
-            if (task != null){ // editing a task
-                detailIntent.putExtra(Task.class.getSimpleName(), task);
-                startActivity(detailIntent);
-            }else { // adding a new task
-                startActivity(detailIntent);
-            }
+
+            // Hide the left hand fragment and show the right hand fragment
+            View taskTimerFragment = findViewById(R.id.fragment);
+            View addEditLayout = findViewById(R.id.task_details_container);
+            taskTimerFragment.setVisibility(View.GONE);
+            addEditLayout.setVisibility(View.VISIBLE);
         }
+        Log.d(TAG, "taskEditRequest: Exiting...");
     }
 
     @Override
@@ -162,6 +204,15 @@ public class TaskTimerActivity extends AppCompatActivity
                     .remove(fragment)
                     .commit();
         }
+
+        View addEditLayout = findViewById(R.id.task_details_container);
+        View taskTimerFragment = findViewById(R.id.fragment);
+        if (!twoPane){
+            // We've just removed the editing fragment, hide the frame
+            addEditLayout.setVisibility(View.GONE);
+            // and make sure the TaskTimerFragment is visible
+            taskTimerFragment.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -174,9 +225,24 @@ public class TaskTimerActivity extends AppCompatActivity
                 getContentResolver().delete(TasksContract.buildTaskUri(taskId), null, null);
                 break;
             case DIALOG_ID_CANCEL_EDIT:
+            case DIALOG_ID_CANCEL_EDIT_UP:
                 // no action required
                 break;
         }
+    }
+
+
+    private void showConfirmationDialog(int dialogId) {
+        // show dialogue to get confirmation to quit editing
+        TaskTimerDialog dialog = new TaskTimerDialog();
+        Bundle args = new Bundle();
+        args.putInt(TaskTimerDialog.DIALOG_ID, dialogId);
+        args.putString(TaskTimerDialog.DIALOG_MESSAGE, getString(R.string.cancelEditDialog_message));
+        args.putInt(TaskTimerDialog.DIALOG_POSITIVE_RID, R.string.cancelEditDialog_positive_caption);
+        args.putInt(TaskTimerDialog.DIALOG_NEGATIVE_RID, R.string.cancelEditDialog_negative_caption);
+
+        dialog.setArguments(args);
+        dialog.show(getSupportFragmentManager(), null);
     }
 
     @Override
@@ -187,7 +253,25 @@ public class TaskTimerActivity extends AppCompatActivity
                 // no action required
                 break;
             case DIALOG_ID_CANCEL_EDIT:
-                finish();
+            case DIALOG_ID_CANCEL_EDIT_UP:
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                Fragment fragment = fragmentManager.findFragmentById(R.id.task_details_container);
+                if (fragment != null){
+                    getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+                    if (twoPane){
+                        // in Landscape, so quit only if the back button was pressed
+                        if (dialogId == DIALOG_ID_CANCEL_EDIT) {
+                            finish();
+                        }
+                    }else {
+                        View addEditLayout = findViewById(R.id.task_details_container);
+                        View taskTimerFragment = findViewById(R.id.fragment);
+                        addEditLayout.setVisibility(View.GONE);
+                        taskTimerFragment.setVisibility(View.VISIBLE);
+                    }
+                }else {
+                    finish();
+                }
                 break;
         }
     }
@@ -206,14 +290,7 @@ public class TaskTimerActivity extends AppCompatActivity
             super.onBackPressed();
         }else {
             // show dialog to get confirmation to quit editing
-            TaskTimerDialog dialog = new TaskTimerDialog();
-            Bundle args = new Bundle();
-            args.putInt(TaskTimerDialog.DIALOG_ID, DIALOG_ID_CANCEL_EDIT);
-            args.putString(TaskTimerDialog.DIALOG_MESSAGE, getString(R.string.cancelEditDialog_message));
-            args.putInt(TaskTimerDialog.DIALOG_POSITIVE_RID, R.string.cancelEditDialog_positive_caption);
-            args.putInt(TaskTimerDialog.DIALOG_NEGATIVE_RID, R.string.cancelEditDialog_negative_caption);
-            dialog.setArguments(args);
-            dialog.show(getSupportFragmentManager(), null);
+            showConfirmationDialog(DIALOG_ID_CANCEL_EDIT);
         }
     }
 

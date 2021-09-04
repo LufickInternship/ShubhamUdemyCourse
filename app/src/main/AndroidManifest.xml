@@ -12,12 +12,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.UdemyCourse">
         <activity
-            android:name=".database_and_friends_app.task_timer.AddEditActivity"
-            android:exported="true"
-            android:label="@string/title_activity_add_edit"
-            android:parentActivityName=".database_and_friends_app.task_timer.TaskTimerActivity"
-            android:theme="@style/Theme.UdemyCourse.NoActionBar" />
-        <activity
             android:name=".database_and_friends_app.task_timer.TaskTimerActivity"
             android:exported="true"
             android:label="@string/title_activity_task_timer"
