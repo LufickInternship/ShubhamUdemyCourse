@@ -17,23 +17,23 @@ public class Task implements Serializable {
         this.sortOrder = sortOrder;
     }
 
-    public long getId() {
+    long getId() {
         return id;
     }
 
-    public String getName() {
+    String getName() {
         return name;
     }
 
-    public String getDescription() {
+    String getDescription() {
         return description;
     }
 
-    public int getSortOrder() {
+    int getSortOrder() {
         return sortOrder;
     }
 
-    public void setId(long id) {
+    void setId(long id) {
         this.id = id;
     }
 

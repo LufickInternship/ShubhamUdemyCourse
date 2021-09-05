@@ -5,6 +5,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import androidx.annotation.LongDef;
+
 /**
  * Basic database class for the application
  *
@@ -14,7 +16,7 @@ public class TaskTimerDatabase extends SQLiteOpenHelper {
     private static final String TAG = "TaskTimerDatabase";
 
     public static final String DATABASE_NAME = "TaskTimer.db";
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 2;
 
     // Implement AppDatabase as a Singleton
     private static TaskTimerDatabase instance = null;
@@ -49,6 +51,8 @@ public class TaskTimerDatabase extends SQLiteOpenHelper {
                 + TasksContract.Columns.TASKS_SORT_ORDER+" INTEGER);";
         Log.d(TAG, sSQL);
         db.execSQL(sSQL);
+
+        addTimingsTable(db);
         Log.d(TAG, "onCreate: ends");
     }
 
@@ -58,10 +62,29 @@ public class TaskTimerDatabase extends SQLiteOpenHelper {
         switch (oldVersion){
             case 1:
                 // upgrade logic from version 1
+                addTimingsTable(db);
                 break;
             default:
                 throw new IllegalStateException("onUpgrade() with unknown newVersion: "+ newVersion);
         }
         Log.d(TAG, "onUpgrade: ends");
+    }
+    private void addTimingsTable(SQLiteDatabase db){
+        String sSQL;
+        sSQL = "CREATE TABLE "+TimingsContract.TABLE_NAME + " ("
+                + TimingsContract.Columns._ID + " INTEGER PRIMARY KEY NOT NULL, "
+                + TimingsContract.Columns.TIMINGS_TASK_ID + " INTEGER NOT NULL, "
+                + TimingsContract.Columns.TIMINGS_START_TIME + " INTEGER, "
+                + TimingsContract.Columns.TIMINGS_DURATION + " INTEGER);";
+        Log.d(TAG, sSQL);
+        db.execSQL(sSQL);
+
+        //TODO ask question about following sql command
+        sSQL = "CREATE TRIGGER Remove_Task"
+                + " AFTER DELETE ON "+ TasksContract.TABLE_NAME
+                + " FOR EACH ROW BEGIN DELETE FROM "+ TimingsContract.TABLE_NAME
+                + " WHERE " + TimingsContract.Columns.TIMINGS_TASK_ID + " = OLD."+TasksContract.Columns._ID+";"
+                + " END;";
+        db.execSQL(sSQL);
     }
 }

@@ -14,11 +14,12 @@ import com.shubhamkumarwinner.udemycourse.R;
 public class CursorRecyclerViewAdapter extends RecyclerView.Adapter<CursorRecyclerViewAdapter.TaskViewHolder> {
     private static final String TAG = "CursorRecyclerAdapter";
     private Cursor cursor;
-    private OnTaskClickListener listener;
+    private final OnTaskClickListener listener;
 
     interface OnTaskClickListener{
-        void onEditClick(Task task);
-        void onDeleteClick(Task task);
+        void onEditClick(@NonNull Task task);
+        void onDeleteClick(@NonNull Task task);
+        void onTaskLongClick(@NonNull Task task);
     }
 
     public CursorRecyclerViewAdapter(Cursor cursor, OnTaskClickListener listener) {
@@ -26,10 +27,6 @@ public class CursorRecyclerViewAdapter extends RecyclerView.Adapter<CursorRecycl
         this.cursor = cursor;
         this.listener = listener;
     }
-
-//    public void setListener(OnTaskClickListener listener) {
-//        this.listener = listener;
-//    }
 
     @NonNull
     @Override
@@ -66,31 +63,36 @@ public class CursorRecyclerViewAdapter extends RecyclerView.Adapter<CursorRecycl
             holder.editButton.setVisibility(View.VISIBLE);
             holder.deleteButton.setVisibility(View.VISIBLE);
 
-            View.OnClickListener buttonListener = new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+            View.OnClickListener buttonListener = view -> {
 //                    Log.d(TAG, "onClick: starts");
-                    switch (view.getId()){
-                        case R.id.tli_edit:
-                            if (listener != null) {
-                                listener.onEditClick(task);
-                            }
-                            break;
-                        case R.id.tli_delete:
-                            if (listener != null) {
-                                listener.onDeleteClick(task);
-                            }
-                            break;
-                        default:
-                            Log.d(TAG, "onClick: found unexpected button id");
-                    }
-//                    Log.d(TAG, "onClick: button with id "+view.getId() + " clicked");
-//                    Log.d(TAG, "onClick: task name is "+task.getName());
+                switch (view.getId()){
+                    case R.id.tli_edit:
+                        if (listener != null) {
+                            listener.onEditClick(task);
+                        }
+                        break;
+                    case R.id.tli_delete:
+                        if (listener != null) {
+                            listener.onDeleteClick(task);
+                        }
+                        break;
+                    default:
+                        Log.d(TAG, "onClick: found unexpected button id");
                 }
+            };
+
+            View.OnLongClickListener buttonLongListener = view -> {
+                Log.d(TAG, "onLongClick: starts");
+                if (listener != null){
+                    listener.onTaskLongClick(task);
+                    return true;
+                }
+                return false;
             };
 
             holder.editButton.setOnClickListener(buttonListener);
             holder.deleteButton.setOnClickListener(buttonListener);
+            holder.itemView.setOnLongClickListener(buttonLongListener);
         }
 
     }
@@ -131,12 +133,12 @@ public class CursorRecyclerViewAdapter extends RecyclerView.Adapter<CursorRecycl
     }
 
     static class TaskViewHolder extends RecyclerView.ViewHolder{
-        private static final String TAG = "TaskViewHolder";
 
-        TextView name = null;
-        TextView description = null;
-        ImageButton editButton = null;
-        ImageButton deleteButton = null;
+        TextView name;
+        TextView description;
+        ImageButton editButton;
+        ImageButton deleteButton;
+        View itemView;
 
         public TaskViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -145,6 +147,7 @@ public class CursorRecyclerViewAdapter extends RecyclerView.Adapter<CursorRecycl
             this.description = itemView.findViewById(R.id.tli_description);
             this.editButton = itemView.findViewById(R.id.tli_edit);
             this.deleteButton = itemView.findViewById(R.id.tli_delete);
+            this.itemView = itemView;
         }
     }
 }

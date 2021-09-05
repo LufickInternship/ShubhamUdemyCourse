@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -18,23 +19,25 @@ import androidx.fragment.app.FragmentManager;
 import com.shubhamkumarwinner.udemycourse.BuildConfig;
 import com.shubhamkumarwinner.udemycourse.R;
 import com.shubhamkumarwinner.udemycourse.databinding.ActivityTaskTimerBinding;
+import com.shubhamkumarwinner.udemycourse.debug.TestData;
+
+import org.w3c.dom.Text;
 
 public class TaskTimerActivity extends AppCompatActivity
         implements CursorRecyclerViewAdapter.OnTaskClickListener,
         AddEditFragment.OnSaveClicked,
         TaskTimerDialog.DialogEvents{
     private static final String TAG = "TaskTimerActivity";
-    public static final int DIALOG_ID_CANCEL_EDIT = 2;
-    public static final int DIALOG_ID_CANCEL_EDIT_UP = 3;
-
-    private AlertDialog dialog= null;       //module scope because we need to dismiss it in onStop
 
     // Whether or not the activity is in 2-pane mode
     // i.e. running in landscape or a tablet
     private boolean twoPane = false;
-    public static final String ADD_EDIT_FRAGMENT = "AddEditFragment";
 
     public static final int DIALOG_ID_DELETE = 1;
+    public static final int DIALOG_ID_CANCEL_EDIT = 2;
+    public static final int DIALOG_ID_CANCEL_EDIT_UP = 3;
+
+    private AlertDialog dialog= null;       //module scope because we need to dismiss it in onStop
 
 
     @Override
@@ -85,6 +88,10 @@ public class TaskTimerActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.task_timer_menu,menu);
+        if (BuildConfig.DEBUG){
+            MenuItem generate = menu.findItem(R.id.task_timer_generate);
+            generate.setVisible(true);
+        }
         return true;
     }
 
@@ -104,6 +111,7 @@ public class TaskTimerActivity extends AppCompatActivity
                 showAboutDialog();
                 break;
             case R.id.task_timer_generate:
+                TestData.generateTestData(getContentResolver());
                 break;
             case android.R.id.home:
                 Log.d(TAG, "onOptionsItemSelected: home button pressed");
@@ -174,12 +182,12 @@ public class TaskTimerActivity extends AppCompatActivity
     }
 
     @Override
-    public void onEditClick(Task task) {
+    public void onEditClick(@NonNull Task task) {
         taskEditRequest(task);
     }
 
     @Override
-    public void onDeleteClick(Task task) {
+    public void onDeleteClick(@NonNull Task task) {
         Log.d(TAG, "onDeleteClick: starts");
         TaskTimerDialog dialog = new TaskTimerDialog();
         Bundle args = new Bundle();
@@ -191,6 +199,30 @@ public class TaskTimerActivity extends AppCompatActivity
 
         dialog.setArguments(args);
         dialog.show(getSupportFragmentManager(), null);
+    }
+
+    @Override
+    public void onTaskLongClick(@NonNull Task task) {
+        //Require to satisfy the interface
+        /*Log.d(TAG, "onTaskLongClick: called");
+        Toast.makeText(this, "Task "+task.getId() + " clicked", Toast.LENGTH_SHORT).show();
+
+        TextView taskName = findViewById(R.id.current_task);
+        if (currentTiming != null){
+            if (task.getId() == currentTiming.getTask().getId()){
+                // the current was tapped a second time, so stop timing
+                currentTiming = null;
+                taskName.setText(R.string.task_timer_task_message);
+            }else {
+                // a new task is being timed, so stop the old one first
+                currentTiming = new Timing(task);
+                taskName.setText("Timing " + currentTiming.getTask().getName());
+            }
+        }else {
+            // no task being timed, so start timing the new task
+            currentTiming = new Timing(task);
+            taskName.setText("Timing "+ currentTiming.getTask().getName());
+        }*/
     }
 
     @Override
