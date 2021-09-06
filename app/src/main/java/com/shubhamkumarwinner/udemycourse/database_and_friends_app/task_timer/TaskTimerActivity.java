@@ -8,20 +8,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-
 import com.shubhamkumarwinner.udemycourse.BuildConfig;
 import com.shubhamkumarwinner.udemycourse.R;
 import com.shubhamkumarwinner.udemycourse.databinding.ActivityTaskTimerBinding;
 import com.shubhamkumarwinner.udemycourse.debug.TestData;
-
-import org.w3c.dom.Text;
 
 public class TaskTimerActivity extends AppCompatActivity
         implements CursorRecyclerViewAdapter.OnTaskClickListener,
@@ -104,6 +99,7 @@ public class TaskTimerActivity extends AppCompatActivity
                 taskEditRequest(null);
                 break;
             case R.id.task_timer_show_durations:
+                startActivity(new Intent(this, DurationsReportActivity.class));
                 break;
             case R.id.task_timer_settings:
                 break;

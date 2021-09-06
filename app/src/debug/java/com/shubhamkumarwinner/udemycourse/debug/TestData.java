@@ -4,13 +4,16 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
+import android.util.Log;
+
+import androidx.annotation.NonNull;
 
 import com.shubhamkumarwinner.udemycourse.database_and_friends_app.task_timer.TimingsContract;
 
 import java.util.GregorianCalendar;
 
 public class TestData {
-    public static void generateTestData(ContentResolver contentResolver){
+    public static void generateTestData(@NonNull ContentResolver contentResolver){
         final int SECS_IN_DAY = 86400;
         final int LOWER_BOUND = 100;
         final int UPPER_BOUND = 500;
@@ -53,7 +56,7 @@ public class TestData {
     private static long randomDateTime(){
         // Set the range of years - change as necessary
         final int startYear = 2020;
-        final int endYear = 2021;
+        final int endYear = 2022;
 
         int sec = getRandomInt(59);
         int min = getRandomInt(59);

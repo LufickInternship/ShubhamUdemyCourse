@@ -36,6 +36,20 @@ public class TaskTimerFragment extends Fragment
     private FragmentTaskTimerBinding binding;
 
     //TODO ask question about what is the replacement of deprecated methods
+
+//    @Override
+//    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+//        Log.d(TAG, "onViewCreated: starts");
+//        super.onViewCreated(view, savedInstanceState);
+//        Activity activity = getActivity();
+//        if (!(activity instanceof CursorRecyclerViewAdapter.OnTaskClickListener) && activity != null) {
+//            throw new ClassCastException(activity.getClass().getSimpleName()
+//                    + " must implement CursorRecyclerViewAdapter.OnTaskClickListener interface");
+//        }
+//        LoaderManager.getInstance(this).initLoader(LOADER_ID, null, this);
+//        setTimingText(currentTiming);
+//    }
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         Log.d(TAG, "onActivityCreated: starts");

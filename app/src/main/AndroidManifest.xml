@@ -12,6 +12,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.UdemyCourse">
         <activity
+            android:name=".database_and_friends_app.task_timer.DurationsReportActivity"
+            android:exported="true"
+            android:label="@string/title_activity_durations_report"
+            android:theme="@style/Theme.UdemyCourse.NoActionBar" />
+        <activity
             android:name=".database_and_friends_app.task_timer.TaskTimerActivity"
             android:exported="true"
             android:label="@string/title_activity_task_timer"

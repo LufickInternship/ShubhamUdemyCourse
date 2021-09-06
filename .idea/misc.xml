@@ -4,10 +4,13 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/Shubham/AndroidStudioProjects/UdemyCourse/app/src/main/res/layout-land/content_task_timer.xml" value="0.1765625" />
+        <entry key="..\:/Users/Shubham/AndroidStudioProjects/UdemyCourse/app/src/main/res/layout-land/task_duration_items.xml" value="0.16197916666666667" />
+        <entry key="..\:/Users/Shubham/AndroidStudioProjects/UdemyCourse/app/src/main/res/layout-land/task_durations.xml" value="0.2" />
         <entry key="..\:/Users/Shubham/AndroidStudioProjects/UdemyCourse/app/src/main/res/layout/about.xml" value="0.33" />
         <entry key="..\:/Users/Shubham/AndroidStudioProjects/UdemyCourse/app/src/main/res/layout/activity_add_edit.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/Shubham/AndroidStudioProjects/UdemyCourse/app/src/main/res/layout/activity_content_provider.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/Shubham/AndroidStudioProjects/UdemyCourse/app/src/main/res/layout/activity_database.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/Shubham/AndroidStudioProjects/UdemyCourse/app/src/main/res/layout/activity_durations_report.xml" value="0.1322983462706716" />
         <entry key="..\:/Users/Shubham/AndroidStudioProjects/UdemyCourse/app/src/main/res/layout/activity_main.xml" value="0.1527777777777778" />
         <entry key="..\:/Users/Shubham/AndroidStudioProjects/UdemyCourse/app/src/main/res/layout/activity_task_timer.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/Shubham/AndroidStudioProjects/UdemyCourse/app/src/main/res/layout/add_edit.xml" value="0.20416666666666666" />
@@ -17,7 +20,10 @@
         <entry key="..\:/Users/Shubham/AndroidStudioProjects/UdemyCourse/app/src/main/res/layout/content_task_timer.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/Shubham/AndroidStudioProjects/UdemyCourse/app/src/main/res/layout/fragment_add_edit.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/Shubham/AndroidStudioProjects/UdemyCourse/app/src/main/res/layout/fragment_task_timer.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/Shubham/AndroidStudioProjects/UdemyCourse/app/src/main/res/layout/task_duration_items.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/Shubham/AndroidStudioProjects/UdemyCourse/app/src/main/res/layout/task_durations.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/Shubham/AndroidStudioProjects/UdemyCourse/app/src/main/res/layout/task_timer_list_item.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/Shubham/AndroidStudioProjects/UdemyCourse/app/src/main/res/menu/menu_report.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/Shubham/AndroidStudioProjects/UdemyCourse/app/src/main/res/menu/task_timer_menu.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/Shubham/AndroidStudioProjects/UdemyCourse/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.2169230769230769" />
         <entry key="..\:/Users/Shubham/AndroidStudioProjects/UdemyCourse/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.2169230769230769" />
