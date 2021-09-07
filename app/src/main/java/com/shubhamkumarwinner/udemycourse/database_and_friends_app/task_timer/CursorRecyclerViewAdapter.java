@@ -115,7 +115,6 @@ public class CursorRecyclerViewAdapter extends RecyclerView.Adapter<CursorRecycl
      * If the given new Cursor is the same instance as the previously set
      * Cursor, null is also returned.
      */
-    //TODO ask question about this method
     Cursor swapCursor(Cursor newCursor){
         if (newCursor == cursor){
             return null;

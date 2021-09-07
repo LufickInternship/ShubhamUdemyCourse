@@ -85,7 +85,6 @@ public class TaskTimerDatabase extends SQLiteOpenHelper {
         Log.d(TAG, sSQL);
         db.execSQL(sSQL);
 
-        //TODO ask question about following sql command
         sSQL = "CREATE TRIGGER Remove_Task"
                 + " AFTER DELETE ON "+ TasksContract.TABLE_NAME
                 + " FOR EACH ROW BEGIN DELETE FROM "+ TimingsContract.TABLE_NAME

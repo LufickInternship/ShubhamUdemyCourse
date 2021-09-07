@@ -12,6 +12,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.UdemyCourse">
         <activity
+            android:name=".fast_adapter.grid_item.IconGridAdapterActivity"
+            android:exported="true"
+            android:label="IconGridAdapter"/>
+        <activity
+            android:name=".fast_adapter.simple_item.SimpleItemAdapterActivity"
+            android:exported="true"
+            android:label="SimpleItemAdapter" />
+        <activity
+            android:name=".fast_adapter.FastAdapterActivity"
+            android:exported="true"
+            android:label="FastAdapterActivity" />
+        <activity
             android:name=".database_and_friends_app.task_timer.DurationsReportActivity"
             android:exported="true"
             android:label="@string/title_activity_durations_report"

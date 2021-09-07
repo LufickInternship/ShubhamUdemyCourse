@@ -3,6 +3,7 @@ package com.shubhamkumarwinner.udemycourse.database_and_friends_app.task_timer;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,6 +15,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.DefaultLifecycleObserver;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
@@ -25,7 +28,7 @@ import com.shubhamkumarwinner.udemycourse.databinding.FragmentTaskTimerBinding;
 import java.security.InvalidParameterException;
 
 public class TaskTimerFragment extends Fragment
-        implements LoaderManager.LoaderCallbacks<Cursor>,
+        implements LoaderManager.LoaderCallbacks<Cursor>, DefaultLifecycleObserver,
         CursorRecyclerViewAdapter.OnTaskClickListener {
     public static final int LOADER_ID = 0;
     private static final String TAG = "TaskTimerFragment";
@@ -35,7 +38,6 @@ public class TaskTimerFragment extends Fragment
 
     private FragmentTaskTimerBinding binding;
 
-    //TODO ask question about what is the replacement of deprecated methods
 
 //    @Override
 //    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -50,10 +52,30 @@ public class TaskTimerFragment extends Fragment
 //        setTimingText(currentTiming);
 //    }
 
+
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    public void onCreate(@NonNull LifecycleOwner owner) {
+        switch(owner.getLifecycle().getCurrentState()){
+            case CREATED:
+                onCreated();
+                break;
+        }
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        requireActivity().getLifecycle().addObserver(this);
+        super.onAttach(context);
+    }
+
+    @Override
+    public void onDetach() {
+        requireActivity().getLifecycle().removeObserver(this);
+        super.onDetach();
+    }
+
+    public void onCreated() {
         Log.d(TAG, "onActivityCreated: starts");
-        super.onActivityCreated(savedInstanceState);
 
         // Activities containing this fragment must implement its callback
         Activity activity = getActivity();
@@ -159,6 +181,8 @@ public class TaskTimerFragment extends Fragment
         return binding.getRoot();
 
     }
+
+
 
     //TODO ask question about mainActivity starts after rotation of device why to use setRetainInstance(true)
     @Override
