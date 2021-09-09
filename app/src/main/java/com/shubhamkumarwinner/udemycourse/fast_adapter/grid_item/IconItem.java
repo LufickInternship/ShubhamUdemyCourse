@@ -76,7 +76,7 @@ public class IconItem<T extends IItem & IExpandable> extends AbstractItem<IconIt
 
         public ViewHolder(View view) {
             super(view);
-            name = view.findViewById(R.id.icon_name);
+            name = view.findViewById(R.id.name);
             image = view.findViewById(R.id.icon);
             this.view = view;
         }

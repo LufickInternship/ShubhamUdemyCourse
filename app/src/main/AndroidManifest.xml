@@ -3,6 +3,7 @@
     package="com.shubhamkumarwinner.udemycourse">
 
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -12,9 +13,51 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.UdemyCourse">
         <activity
+            android:name=".fast_adapter.drag_drop.DragDropAdapterActivity"
+            android:exported="true" />
+        <activity
+            android:name=".fast_adapter.diffutil.DiffUtilAdapterActivity"
+            android:exported="true" />
+        <activity
+            android:name=".fast_adapter.expand_list.ExpandableAdapterActivity"
+            android:exported="true" />
+        <activity
+            android:name=".fast_adapter.multi_type.MultipleTypeItemActivity"
+            android:exported="true" />
+        <activity
+            android:name=".fast_adapter.swipe_list.SwipeListAdapterActivity"
+            android:exported="true" />
+        <activity
+            android:name=".fast_adapter.multi_select.MultiSelectAdapterActivity"
+            android:exported="true"
+            android:label="MultiSelectAdapter" />
+        <activity
+            android:name=".fast_adapter.radio_button.RadioButtonAdapterActivity"
+            android:exported="true"
+            android:label="RadioButtonAdapter" />
+        <activity
+            android:name=".fast_adapter.sort.SortAdapterActivity"
+            android:exported="true"
+            android:label="SortAdapter" />
+        <activity
+            android:name=".fast_adapter.endless_scroll.EndlessScrollListActivity"
+            android:exported="true"
+            android:label="EndlessScrollList" />
+        <activity
+            android:name=".fast_adapter.check_box.CheckboxAdapterActivity"
+            android:exported="true"
+            android:label="CheckboxAdapter" />
+        <activity
+            android:name=".fast_adapter.fast_scroll.FastScrollAdapterActivity"
+            android:exported="true" />
+        <activity
+            android:name=".fast_adapter.image_list.ImageListAdapterActivity"
+            android:exported="true"
+            android:label="ImageListAdapter" />
+        <activity
             android:name=".fast_adapter.grid_item.IconGridAdapterActivity"
             android:exported="true"
-            android:label="IconGridAdapter"/>
+            android:label="IconGridAdapter" />
         <activity
             android:name=".fast_adapter.simple_item.SimpleItemAdapterActivity"
             android:exported="true"

@@ -1,10 +1,12 @@
 package com.shubhamkumarwinner.udemycourse.fast_adapter.simple_item;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.view.MenuItem;
 
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.adapters.ItemAdapter;
@@ -27,6 +29,11 @@ public class SimpleItemAdapterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_simple_item_adapter);
         RecyclerView recyclerView = findViewById(R.id.simple_recycler_view);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("Simple item");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(false);
         //create the ItemAdapter holding your Items
         // both below methods works same
 //        itemAdapter = ItemAdapter.items();
@@ -50,5 +57,18 @@ public class SimpleItemAdapterActivity extends AppCompatActivity {
         //set our adapters to the RecyclerView
         recyclerView.setAdapter(fastAdapter);
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        //handle the click on the back arrow click
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }
